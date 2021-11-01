@@ -9,5 +9,11 @@ defmodule Rumbl.Accounts.User do
     timestamps()
   end
 
+  def changeset(user, atts) do
+    user
+    |> cast(atts, [:name, :username])
+    |> validate_required([:name, :username])
+    |> validate_length(:username, min: 1, max: 20)
+  end
 
 end
