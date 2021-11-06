@@ -21,7 +21,6 @@ defmodule RumblWeb.UserController do
 
   def create(conn, %{"user" => user_params}) do
     case Accounts.register_user(user_params) do
-
       {:ok, user} ->
         conn
         |> put_flash(:info, "#{user.username} created!")
@@ -30,8 +29,16 @@ defmodule RumblWeb.UserController do
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
-
   end
 
-
+  defp authenticate(conn) do
+    if conn.assigns.current_user do
+      conn
+    else
+      conn
+      |> put_flash(:error, "You must be logged in to see this page")
+      |> redirect(to: Routes.page_path(conn, :index))
+      |> halt()
+    end
+  end
 end
