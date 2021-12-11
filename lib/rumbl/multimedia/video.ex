@@ -23,17 +23,16 @@ defmodule Rumbl.Multimedia.Video do
     |> slugify_title()
   end
 
-  defp slugify_title(changeset) do
+  def slugify_title(changeset) do
     case fetch_change(changeset, :title) do
-      {:ok, new_title} ->
-        put_change(changeset, :slug, slugify(new_title))
+      {:ok, new_title} -> put_change(changeset, :slug, slugify(new_title))
       :error -> changeset
     end
   end
 
-  defp slugify(str) do
+  def slugify(str) do
     str
     |> String.downcase()
-    |> String.replace(~r/[^|w-]+/u, "-")
+    |> String.replace(~r/\W+/, "-")
   end
 end
